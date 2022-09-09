@@ -1,5 +1,5 @@
-import {Dashboard} from "/modules/dashboard/Dashboard";
-import {Logger} from "/modules/common/log";
+import {Dashboard} from "../modules/dashboard/Dashboard";
+import {Logger} from "../modules/common/log";
 
 $(function () {
     const onscroll = function () {
@@ -24,4 +24,8 @@ $(function () {
             dashboard.run();
         });
     });
+
+    $.get('/updated.txt',data=>{
+        $('.page-fotter').append($('<div class="updated">data update: '+data+'</div>'));
+    })
 });

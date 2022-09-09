@@ -1,6 +1,6 @@
 import {UIElement} from "./ui";
-import '/modules/css/ui/modal.css';
-import '/modules/css/ui/modal.responsive.css';
+import '../../css/ui/modal.css';
+import '../../css/ui/modal.responsive.css';
 
 class Modal extends UIElement {
 

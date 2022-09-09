@@ -361,6 +361,14 @@ body.dashboards #share_modal .modal-content .share-element button{
     padding: 0;
 }
 
+body.dashboards .page-fotter .updated{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: white;
+    font-size: 10px;
+}
+
 
 @media only screen and (max-width: 1165px) {
     body.dashboards .page-header .header-content h1 {

@@ -1,13 +1,13 @@
-import '/modules/css/dashboard/dashboard.css';
-import {Translator} from "/modules/common/locale/Translator";
-import {isString} from "/modules/common/util";
-import {formatArea} from "/modules/common/areaUtil";
-import Plotly from '/node_modules/plotly.js-dist-min';
-import {mean as calcMean} from "/modules/common/stattUtil";
-import {formatDuration} from "/modules/common/durationUtil";
+import '../css/dashboard/dashboard.css';
+import {Translator} from "../common/locale/Translator";
+import {isString} from "../common/util";
+import {formatArea} from "../common/areaUtil";
+import Plotly from 'plotly.js-dist-min';
+import {mean as calcMean} from "../common/stattUtil";
+import {formatDuration} from "../common/durationUtil";
 import {NiceScale} from "./NiceScale";
-import {ModalHalf} from "/modules/common/ui/Modal";
-import isMobile from "/node_modules/is-mobile";
+import {ModalHalf} from "../common/ui/Modal";
+import isMobile from "is-mobile";
 
 
 let LOGGER;
@@ -387,7 +387,7 @@ class Dashboard {
         }).observe(chartElement[0]);
     }
 
-    _renderStackedBarChart(dataSeries, chartElement, xlabels) {
+    _renderStackedBarChart(dataSeries, chartElement, xlabels, delayRender=false) {
         const layout = JSON.parse(JSON.stringify(this.stackedBarChartLayout));
         layout.xaxis.type = 'category';
         const config = JSON.parse(JSON.stringify(this.chartConfig));
@@ -401,17 +401,16 @@ class Dashboard {
             data.marker = {
                 color: this.colors[colorIndex--]
             };
-            data.hovertemplate = "%{y:$2.f}%";
+            data.hovertemplate = "%{y:.2f}%";
         });
-
-        Plotly.newPlot(chartElement[0], dataSeries, layout, config);
 
         function relayout() {
             Plotly.relayout(chartElement[0], {height: 280, autosize: true});
         }
-
-        setTimeout(relayout, 500);
-        new ResizeObserver(relayout).observe(chartElement[0]);
+        Plotly.newPlot(chartElement[0], dataSeries, layout, config);
+        setTimeout(()=>{
+            new ResizeObserver(relayout).observe(chartElement[0]);
+        }, delayRender?1500:50);
     }
 
     _renderLineChart(data, chartElement, min = undefined, max = undefined) {
@@ -1027,7 +1026,7 @@ class Dashboard {
                 const data = this._getCountsByCauseType(features, 'year', years);
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderStackedBarChart(data, chartElement);
+                this._renderStackedBarChart(data, chartElement,undefined,true);
             };
             if (this.totalCauseData[this.year]) {
                 afterFetch(this.totalCauseData);

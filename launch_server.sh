@@ -1,4 +1,5 @@
 rm -R dist
-npm run copy ; npm start
-#gawk -i inplace '!/.css";/' dist/index.*.js
+npm run copy
+date > dist/updated.txt
+npm start
 

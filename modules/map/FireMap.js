@@ -1,12 +1,12 @@
 import 'ol/ol.css';
-import '/modules/css/map/ui.css';
-import '/modules/css/map/map.css';
-import '/modules/css/map/map.responsive.css';
-import '/modules/css/map/sliders.css';
-import '/modules/css/map/sliders.responsive.css';
-import {isString} from "/modules/common/util";
-import {Translator} from "/modules/common/locale/Translator";
-import {ModalFull, ModalHalf} from "/modules/common/ui/Modal";
+import '../css/map/ui.css';
+import '../css/map/map.css';
+import '../css/map/map.responsive.css';
+import '../css/map/sliders.css';
+import '../css/map/sliders.responsive.css';
+import {isString} from "../common/util";
+import {Translator} from "../common/locale/Translator";
+import {ModalFull, ModalHalf} from "../common/ui/Modal";
 import Map from 'ol/Map';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
@@ -24,8 +24,8 @@ import {Popup} from "./ui/Popup";
 import isMobile from "is-mobile";
 import {Coordinates} from "./ui/Coordinates";
 import Plotly from 'plotly.js-dist-min';
-import {classifyAreasFromFeatures, formatArea, MIN_VALID_AREA} from "/modules/common/areaUtil";
-import {dateFromStr, formatTs} from "/modules/common/dateUtil";
+import {classifyAreasFromFeatures, formatArea, MIN_VALID_AREA} from "../common/areaUtil";
+import {dateFromStr, formatTs} from "../common/dateUtil";
 import {
     classifyDurationsFromFeatures,
     classifyFirefightingDurationsFromFeatures,
@@ -33,7 +33,7 @@ import {
     formatDuration,
     getDuration,
     MIN_VALID_DURATION
-} from "/modules/common/durationUtil";
+} from "../common/durationUtil";
 
 const MERCATOR_CODE = "EPSG:3857";
 const WGS84_CODE = "EPSG:4326";
@@ -473,7 +473,7 @@ class FireMap {
                 anchor: [0.46387078, 0.7155],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon.svg',
+                src: '/img/fire_icon.svg',
                 scale: .25,
                 displacement: [0, 0],
                 opacity: 1,
@@ -482,7 +482,7 @@ class FireMap {
                 anchor: [0.375, 0.6],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon.svg',
+                src: '/img/fire_icon.svg',
                 scale: .3,
                 displacement: [0, 0],
                 opacity: 1,
@@ -491,7 +491,7 @@ class FireMap {
                 anchor: [0.275, 0.46],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon.svg',
+                src: '/img/fire_icon.svg',
                 scale: .45,
                 displacement: [0, 0],
                 opacity: 1,
@@ -501,7 +501,7 @@ class FireMap {
                 anchor: [0.46387078, 0.7155],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon_selected.svg',
+                src: '/img/fire_icon_selected.svg',
                 scale: .25,
                 displacement: [0, 0],
                 opacity: 1,
@@ -510,7 +510,7 @@ class FireMap {
                 anchor: [0.375, 0.6],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon_selected.svg',
+                src: '/img/fire_icon_selected.svg',
                 scale: .3,
                 displacement: [0, 0],
                 opacity: 1,
@@ -519,7 +519,7 @@ class FireMap {
                 anchor: [0.275, 0.46],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                src: 'img/fire_icon_selected.svg',
+                src: '/img/fire_icon_selected.svg',
                 scale: .45,
                 displacement: [0, 0],
                 opacity: 1,

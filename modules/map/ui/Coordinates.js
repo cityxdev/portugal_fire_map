@@ -1,9 +1,9 @@
-import {UIElement} from "/modules/common/ui/ui";
+import {UIElement} from "../../common/ui/ui";
 import {MERCATOR_CODE, WGS84_CODE} from "../FireMap";
 import {MousePosition, ScaleLine} from "ol/control";
 import {createStringXY} from "ol/coordinate";
-import '/modules/css/map/ui/coordinates.css';
-import '/modules/css/map/ui/coordinates.responsive.css';
+import '../../css/map/ui/coordinates.css';
+import '../../css/map/ui/coordinates.responsive.css';
 import {transform} from "ol/proj";
 
 

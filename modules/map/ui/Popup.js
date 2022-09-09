@@ -1,6 +1,6 @@
-import {UIElement} from "/modules/common/ui/ui";
-import '/modules/css/map/ui/popup.css';
-import '/modules/css/map/ui/popup.responsive.css';
+import {UIElement} from "../../common/ui/ui";
+import '../../css/map/ui/popup.css';
+import '../../css/map/ui/popup.responsive.css';
 import {Overlay} from "ol";
 
 class Popup extends UIElement {

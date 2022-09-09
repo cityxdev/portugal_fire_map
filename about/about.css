@@ -73,7 +73,7 @@ a:hover{
     width: 100%;
     background-image: url("/img/bg2.jpg");
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: 0 0;
     background-size: 100% auto;
     padding-top: 50px;
     padding-left: 10px;

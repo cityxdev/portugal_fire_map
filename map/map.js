@@ -1,5 +1,5 @@
-import {FireMap} from "/modules/map/FireMap";
-import {Logger} from "/modules/common/log";
+import {FireMap} from "../modules/map/FireMap";
+import {Logger} from "../modules/common/log";
 
 $(function() {
     cache4js.ajaxCache({
@@ -17,6 +17,6 @@ $(function() {
         });
     });
     $('.back-button').click(function (){
-        window.location.href='/';
+        window.location.href='/dashboard';
     });
 });

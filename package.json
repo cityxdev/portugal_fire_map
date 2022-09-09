@@ -1,10 +1,9 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.2.0",
     "is-mobile": "^3.1.1",
     "lz-string": "^1.4.4",
     "ol": "^7.1.0",
-    "plotly.js-dist-min": "^2.14.0",
+    "plotly.js-dist-min": "^2.13.3",
     "proj4": "^2.8.0"
   },
   "devDependencies": {
@@ -15,9 +14,9 @@
   "version": "1.0.0",
   "targets": {
     "dashboard": {
-      "source": "/index.html",
+      "source": "/dashboard/index.html",
       "context": "browser",
-      "distDir": "./dist"
+      "distDir": "./dist/dashboard"
     },
     "webmap": {
       "source": "/map/index.html",
@@ -31,8 +30,9 @@
     }
   },
   "scripts": {
-    "start": "parcel --target about --target dashboard --target webmap",
-    "copy": "mkdir -p dist/config ; cp -R config/* dist/config ; mkdir -p dist/img ; cp -R img/* dist/img "
+    "start": "parcel",
+    "copy": "mkdir -p dist/config ; cp -R config/* dist/config ; mkdir -p dist/img ; cp -R img/* dist/img ; cp favicon.ico dist/",
+    "build": "parcel build ./"
   },
   "keywords": [],
   "author": "",
