@@ -1,0 +1,26 @@
+<GeoServerTileLayer>
+  <id>LayerInfoImpl--7a1f207c:182d48cff2b:123f</id>
+  <enabled>false</enabled>
+  <inMemoryCached>true</inMemoryCached>
+  <name>portugal_wildfire_map:fire_points_simple</name>
+  <mimeFormats>
+    <string>image/png</string>
+    <string>image/jpeg</string>
+  </mimeFormats>
+  <gridSubsets/>
+  <metaWidthHeight>
+    <int>4</int>
+    <int>4</int>
+  </metaWidthHeight>
+  <expireCache>0</expireCache>
+  <expireClients>0</expireClients>
+  <parameterFilters>
+    <styleParameterFilter>
+      <key>STYLES</key>
+      <defaultValue></defaultValue>
+      <availableStyles class="sorted-set"/>
+      <defaultStyle>generic</defaultStyle>
+    </styleParameterFilter>
+  </parameterFilters>
+  <gutter>0</gutter>
+</GeoServerTileLayer>

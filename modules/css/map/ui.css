@@ -1,0 +1,102 @@
+.fire-map:not(.mobile-device) ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 12px;
+}
+
+.fire-map:not(.mobile-device) ::-webkit-scrollbar-track {
+    -webkit-appearance: none;
+    background: transparent;
+    background-clip: content-box;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.fire-map:not(.mobile-device) ::-webkit-scrollbar-thumb {
+    -webkit-appearance: none;
+    background-color: #aaa;
+    background-clip: padding-box;
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+}
+
+.fire-map:not(.mobile-device) ::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+}
+
+
+button.seamless {
+    color: white;
+    background-color: transparent;
+    border: 0;
+    height: 30px;
+    width: 30px;
+    font-size: 25px;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 0;
+}
+
+button.seamless.active {
+    border: 1px solid #A25B5B;
+}
+
+button.seamless:hover {
+    border: 1px solid #D5D8B5;
+}
+
+@-moz-document url-prefix() {
+    button.seamless.active,
+    button.seamless:hover {
+        padding-bottom: 1px;
+    }
+
+    .mobile-device button.seamless.active,
+    .mobile-device button.seamless:hover {
+        position: relative;
+    }
+    .mobile-device button.seamless.active i,
+    .mobile-device button.seamless:hover i {
+        padding: 0;
+        position: absolute;
+        top: 0.5px;
+        left: 0.5px;
+    }
+}
+
+button.seamless.disabled,
+button.seamless.disabled:hover {
+    color: #D5D8B5;
+}
+
+.fire-map .ol-control {
+    background-color: rgba(213, 216, 181, 0.75);
+    border-radius: 18px;
+    padding: 1px;
+}
+
+.fire-map .ol-control button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #809A6F;
+    color: white;
+    font-weight: bold;
+    opacity: 1;
+    margin: 2px;
+}
+
+.fire-map .ol-control button:hover {
+    border: 1px solid #D5D8B5;
+}
+
+.fire-map .ol-control.ol-zoom {
+    top: unset;
+    bottom: .5em;
+}
+
+.fire-map .ol-control button:hover,
+.fire-map .ol-control button:focus {
+    outline: none;
+    text-decoration: none;
+}

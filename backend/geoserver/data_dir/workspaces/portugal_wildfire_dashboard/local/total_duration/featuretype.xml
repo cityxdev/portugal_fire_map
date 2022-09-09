@@ -1,0 +1,56 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-ca7</id>
+  <name>total_duration</name>
+  <nativeName>total_duration</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-7321649a:182fa352ea5:5b90</id>
+  </namespace>
+  <title>total_duration</title>
+  <keywords>
+    <string>features</string>
+    <string>total_duration</string>
+  </keywords>
+  <srs>EPSG:404000</srs>
+  <nativeBoundingBox>
+    <minx>-1.0</minx>
+    <maxx>0.0</maxx>
+    <miny>-1.0</miny>
+    <maxy>0.0</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-1.0</minx>
+    <maxx>0.0</maxx>
+    <miny>-1.0</miny>
+    <maxy>0.0</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>total_duration</name>
+        <sql>SELECT * FROM dashboard.total_duration WHERE %year%=0 OR year=%year%
+</sql>
+        <escapeSql>false</escapeSql>
+        <parameter>
+          <name>year</name>
+          <defaultValue>2022</defaultValue>
+          <regexpValidator>^[\d]+$</regexpValidator>
+        </parameter>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-7321649a:182fa352ea5:5b92</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

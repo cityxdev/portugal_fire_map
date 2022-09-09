@@ -1,5 +1,6 @@
-/dev/icnf_fire_data/
-/dev/icnf_fire_data.zip
+/backend/icnf_fire_data/
+/backend/icnf_fire_data.zip
 /.idea/
 /.parcel-cache/
+/node_modules/
 /dist/

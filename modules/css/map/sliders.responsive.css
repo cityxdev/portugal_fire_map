@@ -1,0 +1,9 @@
+.fire-map.small-map .sliders-container .sliders .slider-container .slider-ticks > div.label{
+    font-size: 12px;
+}
+
+@-moz-document url-prefix() {
+    .fire-map.small-map .sliders-container .sliders .slider-container .slider-ticks {
+        margin-top: -8px;
+    }
+}

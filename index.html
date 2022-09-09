@@ -1,25 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <link rel="stylesheet" type="text/css" href="/css/page.css">
+    <title>Dados históricos de incêndios</title>
 
-    <title>Mapa histórico de incêndios</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <script type="module" src="/map.js"></script>
-    <script type="javascript" src="/init.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/pieroxy/lz-string@master/libs/lz-string.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/cityxdev/cache4.js@master/cache4.min.js"></script>
+    <script type="module" src="/index.js"></script>
 </head>
-<body>
+<body class="dashboards">
 <div class="page-header">
-    <div class="title"><h1>Mapa histórico de incêndios</h1></div>
-    <div class="about-container"><button class="seamless about-button"><i class="fa-solid fa-circle-info"></i></button></div>
+    <div class="header-content">
+        <h1 class="hidden-title-part-small">Dados históricos de incêndios</h1>
+        <h1 class="hidden-title-part-wide">Dados hist. de incêndios</h1>
+        <div class="description">
+            Base para análises comparativas, nas dimensões temporal e geográfica, das causas, áreas e combate, a partir dos dados de histórico do ICNF para os incêndios registados em Portugal Continental.
+        </div>
+        <div class="controls">
+            <div class="select-container">
+                <select class="filter-year"></select><span></span>
+            </div>
+            <div class="select-container">
+                <select class="filter-lau1">
+                    <option value="all" selected>Nacional</option>
+                </select><span></span>
+            </div>
+            <div class="map-link-container">
+                <a class="map-link" title="Mapa" href="/map"><i class="fa-solid fa-globe"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="fade"></div>
 </div>
-<div id="map" class="map"></div>
+<div class="page-body">
+    <div class="dashboards" id="dashboards">
+        <div class="group">
+            <div class="header">
+                <h2>Ignições</h2>
+            </div>
+            <div class="context">Ignição é o início de um incêndio. Incluem-se todos os incêndios com área ardida maior
+                que 10m<sup>2</sup>.
+            </div>
+            <div class="body">
+                <div class="group-element ignition half counter">
+                    <div class="header">
+                        <h3>Total</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element ignition hourly half">
+                    <div class="header">
+                        <h3>Distribuição horária <span class="hidden-title-part-wide">- Ignições</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element ignition monthly half">
+                    <div class="header">
+                        <h3>Distribuição mensal <span class="hidden-title-part-wide">- Ignições</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element ignition history half">
+                    <div class="header">
+                        <h3>Evolução histórica <span class="hidden-title-part-wide">- Ignições</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="group">
+            <div class="header">
+                <h2>Área ardida</h2>
+            </div>
+            <div class="context">Área consumida por cada incêndio. Incluem-se todos os incêndios com área ardida maior
+                que 10m<sup>2</sup>.
+            </div>
+            <div class="body">
+                <div class="group-element area half counter">
+                    <div class="header">
+                        <h3>Total</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element area monthly half">
+                    <div class="header">
+                        <h3>Distribuição mensal (ha) <span class="hidden-title-part-wide">- Área ardida</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element area history">
+                    <div class="header">
+                        <h3>Evolução histórica (km<sup>2</sup>) <span class="hidden-title-part-wide">- Área ardida</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="group">
+            <div class="header">
+                <h2>Causa</h2>
+            </div>
+            <div class="context">Qual a causa de cada incêndio? Incluem-se todos os incêndios com área ardida maior que
+                10m<sup>2</sup>.
+            </div>
+            <div class="body">
+                <div class="group-element cause year half">
+                    <div class="header">
+                        <h3>Tipologia de causa</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element cause hourly half">
+                    <div class="header">
+                        <h3>Distribuição horária <span class="hidden-title-part-wide">- Tipologia de causa</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element cause monthly half">
+                    <div class="header">
+                        <h3>Distribuição mensal <span class="hidden-title-part-wide">- Tipologia de causa</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element cause history half">
+                    <div class="header">
+                        <h3>Evolução histórica <span class="hidden-title-part-wide">- Tipologia de causa</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="group">
+            <div class="header">
+                <h2>Combate</h2>
+            </div>
+            <div class="context">Quanto tempo leva cada incêndio a ser extinto? Incluem-se todos os incêndios com área
+                ardida maior que 10m<sup>2</sup>, para os quais existam registos dos momentos-chave no que respeita ao
+                combate.<br/>A média é calculada com base na mediana de cada Distrito.
+            </div>
+            <div class="body">
+                <div class="group-element duration year half">
+                    <div class="header">
+                        <h3>Duração total</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element duration history half">
+                    <div class="header">
+                        <h3>Evolução histórica <span class="hidden-title-part-wide">- Duração total</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element response-time year half">
+                    <div class="header">
+                        <h3>Tempo de resposta</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element response-time history half">
+                    <div class="header">
+                        <h3>Evolução histórica <span class="hidden-title-part-wide">- Tempo de resposta</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element firefighting-duration year half">
+                    <div class="header">
+                        <h3>Duração do combate</h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+                <div class="group-element firefighting-duration history half">
+                    <div class="header">
+                        <h3>Evolução histórica <span class="hidden-title-part-wide">- Duração do combate</span></h3>
+                    </div>
+                    <div class="body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+    <br/><br/>
+</div>
+
+<div class="page-fotter">
+    <div class="about-container">
+        <a target="_blank" href="/about">Sobre</a>
+    </div>
+    <div class="share-container">
+        <button title="partilhar" class="share-button" type="button"><i class="fa-solid fa-share-nodes"></i></button>
+    </div>
+</div>
 </body>
+
 </html> 

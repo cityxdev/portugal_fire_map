@@ -1,0 +1,17 @@
+<layer>
+  <name>lau1</name>
+  <id>LayerInfoImpl-251959dd:182b37078ed:-7fee</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-251959dd:182b37078ed:-7fd6</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-251959dd:182b37078ed:-7fef</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-20 13:38:41.951 UTC</dateCreated>
+  <dateModified>2022-08-20 13:57:56.861 UTC</dateModified>
+</layer>

@@ -1,0 +1,14 @@
+<layer>
+  <name>cause_type_monthly</name>
+  <id>LayerInfoImpl-7321649a:182faf526e9:-cae</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-caf</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-04 20:20:25.885 UTC</dateCreated>
+  <dateModified>2022-09-04 21:40:07.635 UTC</dateModified>
+</layer>

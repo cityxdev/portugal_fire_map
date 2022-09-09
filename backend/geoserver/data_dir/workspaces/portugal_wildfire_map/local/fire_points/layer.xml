@@ -1,0 +1,17 @@
+<layer>
+  <name>fire_points</name>
+  <id>LayerInfoImpl-251959dd:182b37078ed:-7ff2</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-251959dd:182b37078ed:-7ffc</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-251959dd:182b37078ed:-7ff3</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-20 13:38:02.2 UTC</dateCreated>
+  <dateModified>2022-08-20 13:39:41.476 UTC</dateModified>
+</layer>

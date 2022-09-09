@@ -1,0 +1,17 @@
+<layer>
+  <name>toponymy</name>
+  <id>LayerInfoImpl--7a1f207c:182cfb0c4e5:32e1</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7a1f207c:182cfb0c4e5:3345</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--7a1f207c:182cfb0c4e5:32e0</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-24 15:30:12.286 UTC</dateCreated>
+  <dateModified>2022-08-24 15:35:37.365 UTC</dateModified>
+</layer>

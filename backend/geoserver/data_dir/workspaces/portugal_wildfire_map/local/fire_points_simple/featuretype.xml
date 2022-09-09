@@ -1,0 +1,58 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--7a1f207c:182d48cff2b:123e</id>
+  <name>fire_points_simple</name>
+  <nativeName>fire_points_simple</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-251959dd:182b37078ed:-7ff5</id>
+  </namespace>
+  <title>fire_points_simple</title>
+  <keywords>
+    <string>features</string>
+    <string>fire_points_simple</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-9.51</minx>
+    <maxx>-6.2</maxx>
+    <miny>36.9</miny>
+    <maxy>42.2</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-9.51</minx>
+    <maxx>-6.2</maxx>
+    <miny>36.9</miny>
+    <maxy>42.2</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>fire_points_simple</name>
+        <sql>SELECT id,year,ts,extinguishing_ts, first_response_ts, alarm_ts,total_area,fire_type,cause_type,point&#xd;
+FROM layers.fire_points
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>point</name>
+          <type>Geometry</type>
+          <srid>-1</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-251959dd:182b37078ed:-7ff4</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

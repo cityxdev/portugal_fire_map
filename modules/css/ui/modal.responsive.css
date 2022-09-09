@@ -1,0 +1,37 @@
+.small-map .modal-outer.full>.modal-inner {
+    width: 100%;
+    margin: 10px;
+}
+
+.small-map .modal-outer.full>.modal-inner {
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+}
+
+.small-map .modal-outer>.modal-inner>.modal-header{
+    height: 35px;
+}
+.small-map .modal-outer>.modal-inner>.modal-header>.modal-title {
+    margin-top: 5px;
+}
+.small-map .modal-outer>.modal-inner>.modal-header>.modal-buttons-container>button.modal-closer {
+    margin-top: 0;
+}
+@-moz-document url-prefix() {
+    .small-map.mobile-device .modal-outer>.modal-inner>.modal-header>.modal-buttons-container>button.modal-closer {
+        margin-top: -4px;
+    }
+}
+.small-map .modal-outer>.modal-inner>.modal-header>.modal-buttons-container>button.modal-expander {
+    margin-top: -4px;
+}
+.small-map .modal-outer>.modal-inner>.modal-content{
+    height: calc(100% - 35px);
+}
+
+.small-map .modal-outer.half.expanded>.modal-inner,
+.small-map .modal-outer.two-thirds.expanded>.modal-inner{
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 10px;
+}

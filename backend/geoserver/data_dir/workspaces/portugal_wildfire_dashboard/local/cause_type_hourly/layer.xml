@@ -1,0 +1,14 @@
+<layer>
+  <name>cause_type_hourly</name>
+  <id>LayerInfoImpl-7321649a:182faf526e9:-cac</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-cad</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-04 20:21:06.196 UTC</dateCreated>
+  <dateModified>2022-09-04 21:35:54.808 UTC</dateModified>
+</layer>

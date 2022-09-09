@@ -1,0 +1,14 @@
+<layer>
+  <name>response_time</name>
+  <id>LayerInfoImpl-7321649a:182faf526e9:-caa</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-cab</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-04 20:23:15.69 UTC</dateCreated>
+  <dateModified>2022-09-04 21:40:48.112 UTC</dateModified>
+</layer>

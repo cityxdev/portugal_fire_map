@@ -1,0 +1,52 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--7a1f207c:182d75ecd22:-1650</id>
+  <name>fire_multipolygons_simple</name>
+  <nativeName>fire_multipolygons_simple</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-251959dd:182b37078ed:-7ff5</id>
+  </namespace>
+  <title>fire_multipolygons_simple</title>
+  <keywords>
+    <string>features</string>
+    <string>fire_multipolygons_simple</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-9.51</minx>
+    <maxx>-6.2</maxx>
+    <miny>36.9</miny>
+    <maxy>42.2</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-9.51</minx>
+    <maxx>-6.2</maxx>
+    <miny>36.9</miny>
+    <maxy>42.2</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>fire_multipolygons_simple</name>
+        <sql>SELECT id,year,ts,total_area,fire_type,multipolygon&#xd;
+FROM layers.fire_multipolygons
+</sql>
+        <escapeSql>false</escapeSql>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-251959dd:182b37078ed:-7ff4</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

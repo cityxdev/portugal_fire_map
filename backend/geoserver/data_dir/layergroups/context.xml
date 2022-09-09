@@ -1,0 +1,39 @@
+<layerGroup>
+  <id>LayerGroupInfoImpl-251959dd:182b37078ed:1545</id>
+  <name>context</name>
+  <mode>SINGLE</mode>
+  <title>lau and toponymy</title>
+  <publishables>
+    <published type="layer">
+      <id>LayerInfoImpl--7a1f207c:182cfb0c4e5:32e1</id>
+    </published>
+    <published type="layer">
+      <id>LayerInfoImpl-251959dd:182b37078ed:-7fea</id>
+    </published>
+    <published type="layer">
+      <id>LayerInfoImpl-251959dd:182b37078ed:-7fec</id>
+    </published>
+    <published type="layer">
+      <id>LayerInfoImpl-251959dd:182b37078ed:-7fee</id>
+    </published>
+  </publishables>
+  <styles>
+    <style/>
+    <style/>
+    <style/>
+    <style/>
+  </styles>
+  <bounds>
+    <minx>-1059538.913370378</minx>
+    <maxx>-689067.6480103635</maxx>
+    <miny>4433811.400058809</miny>
+    <maxy>5184226.044572054</maxy>
+    <crs class="projected">EPSG:3857</crs>
+  </bounds>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-20 14:32:45.643 UTC</dateCreated>
+  <dateModified>2022-08-24 16:59:12.175 UTC</dateModified>
+</layerGroup>

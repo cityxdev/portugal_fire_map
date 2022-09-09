@@ -1,0 +1,14 @@
+<layer>
+  <name>total_fire_monthly</name>
+  <id>LayerInfoImpl-7321649a:182faf526e9:-cb8</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-cb9</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-04 20:11:42.138 UTC</dateCreated>
+  <dateModified>2022-09-04 21:41:46.711 UTC</dateModified>
+</layer>

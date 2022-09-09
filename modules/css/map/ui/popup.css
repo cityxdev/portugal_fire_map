@@ -1,0 +1,92 @@
+.fire-map .popup {
+    width: 380px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border: 2px solid #CC9C75;
+    background-color: #D5D8B5;
+    z-index: 1000;
+}
+
+.fire-map .popup .popup-header {
+    height: 30px;
+    background-color: #809A6F;
+    color: white;
+    padding: 5px;
+}
+
+.fire-map .popup .popup-header .popup-title {
+    display: inline-block;
+    width: calc(100% - 35px);
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+    height: 100%;
+}
+
+.fire-map .popup .popup-header .popup-buttons-container {
+    display: inline-block;
+    width: 30px;
+    font-size: 14px;
+    color: white;
+    text-align: right;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.fire-map .popup .popup-header .popup-buttons-container .popup-closer {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    font-size: 20px;
+    border: 0;
+    color: white;
+    cursor: pointer;
+    background-color: transparent;
+    text-align: center;
+    margin-top: -2px;
+}
+
+@-moz-document url-prefix() {
+    .fire-map .popup .popup-header .popup-buttons-container .popup-closer {
+        margin-top: -4px;
+    }
+    .fire-map .ol-touch .popup .popup-header{
+        padding-top: 2px;
+    }
+    .fire-map .ol-touch .popup .popup-header .popup-buttons-container .popup-closer {
+        margin-top: -2px;
+    }
+}
+
+
+
+.fire-map .popup .popup-content {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.fire-map .popup .popup-content .outer-content .navigation{
+    margin-bottom: 5px;
+}
+.fire-map .popup .popup-content .outer-content button{
+    color: #A25B5B;
+    font-size: 14px;
+    border: 0;
+    background: transparent;
+    width: 20px;
+    height: 20px;
+}
+.fire-map .popup .popup-content .outer-content button.disabled{
+    color: #777;
+}
+.fire-map .popup .popup-content .outer-content button:not(.disabled):hover{
+    border: 1px solid #CC9C75;
+    border-radius: 50%;
+}
+.fire-map .popup .popup-content .outer-content button.next {
+    float: right;
+}
+

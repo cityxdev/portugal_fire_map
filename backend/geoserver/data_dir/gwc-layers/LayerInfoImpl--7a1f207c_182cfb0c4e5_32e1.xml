@@ -1,0 +1,26 @@
+<GeoServerTileLayer>
+  <id>LayerInfoImpl--7a1f207c:182cfb0c4e5:32e1</id>
+  <enabled>false</enabled>
+  <inMemoryCached>true</inMemoryCached>
+  <name>portugal_wildfire_map:toponymy</name>
+  <mimeFormats>
+    <string>image/png</string>
+    <string>image/jpeg</string>
+  </mimeFormats>
+  <gridSubsets/>
+  <metaWidthHeight>
+    <int>4</int>
+    <int>4</int>
+  </metaWidthHeight>
+  <expireCache>0</expireCache>
+  <expireClients>0</expireClients>
+  <parameterFilters>
+    <styleParameterFilter>
+      <key>STYLES</key>
+      <defaultValue></defaultValue>
+      <availableStyles class="sorted-set"/>
+      <defaultStyle>portugal_wildfire_map:toponymy</defaultStyle>
+    </styleParameterFilter>
+  </parameterFilters>
+  <gutter>0</gutter>
+</GeoServerTileLayer>

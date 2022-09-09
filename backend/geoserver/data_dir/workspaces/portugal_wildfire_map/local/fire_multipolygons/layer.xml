@@ -1,0 +1,17 @@
+<layer>
+  <name>fire_multipolygons</name>
+  <id>LayerInfoImpl-251959dd:182b37078ed:-7ff0</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl-251959dd:182b37078ed:-7ffe</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-251959dd:182b37078ed:-7ff1</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-20 13:38:21.572 UTC</dateCreated>
+  <dateModified>2022-08-20 13:43:12.746 UTC</dateModified>
+</layer>

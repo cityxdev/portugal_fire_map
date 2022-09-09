@@ -1,0 +1,41 @@
+<featureType>
+  <id>FeatureTypeInfoImpl-251959dd:182b37078ed:-7ff3</id>
+  <name>fire_points</name>
+  <nativeName>fire_points</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-251959dd:182b37078ed:-7ff5</id>
+  </namespace>
+  <title>fire_points</title>
+  <keywords>
+    <string>features</string>
+    <string>fire_points</string>
+  </keywords>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-9.50027777777778</minx>
+    <maxx>-6.20055555555556</maxx>
+    <miny>36.9666666666667</miny>
+    <maxy>42.152630999883</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-9.50027777777778</minx>
+    <maxx>-6.20055555555556</maxx>
+    <miny>36.9666666666667</miny>
+    <maxy>42.152630999883</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl-251959dd:182b37078ed:-7ff4</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+</featureType>

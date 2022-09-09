@@ -1,0 +1,14 @@
+<layer>
+  <name>total_fire_hourly</name>
+  <id>LayerInfoImpl-7321649a:182faf526e9:-cb6</id>
+  <type>VECTOR</type>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-7321649a:182faf526e9:-cb7</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-04 20:13:12.249 UTC</dateCreated>
+  <dateModified>2022-09-04 21:41:34.538 UTC</dateModified>
+</layer>
