@@ -105,16 +105,21 @@ class FireMap {
             self.isSmallMapHeight = mapHeight < MAX_SMALL_HEIGHT_THRESHOLD;
             if (self.isSmallMapWidth) {
                 self.target.addClass('small-map-width').addClass('small-map');
+                $('body').addClass('small-map-width').addClass('small-map');
             } else {
                 self.target.removeClass('small-map-width');
+                $('body').removeClass('small-map-width');
             }
             if (self.isSmallMapHeight) {
                 self.target.addClass('small-map-height').addClass('small-map');
+                $('body').addClass('small-map-height').addClass('small-map');
             } else {
                 self.target.removeClass('small-map-height');
+                $('body').removeClass('small-map-height');
             }
             if (!self.isSmallMapHeight && !self.isSmallMapWidth) {
                 self.target.removeClass('small-map');
+                $('body').removeClass('small-map');
             }
         }
 

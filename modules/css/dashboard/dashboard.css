@@ -379,7 +379,7 @@ body.dashboards .page-fotter .updated{
     }
 }
 
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 900px) {
     body.dashboards .select-container select,
     body.dashboards .select-container select:focus{
         width: 70px;
@@ -409,7 +409,7 @@ body.dashboards .page-fotter .updated{
     }
     @-moz-document url-prefix() {
         body.dashboards a.map-link{
-            top: -18px;
+            top: -22px;
         }
     }
 
@@ -448,5 +448,17 @@ body.dashboards .page-fotter .updated{
     body.dashboards .page-body .dashboards .group .body .group-element .body.no-data{
         height: 150px;
         padding-top: 60px;
+    }
+
+    body.dashboards .modal-outer.half>.modal-inner{
+        top:15%;
+        left:15%;
+        width: 70%;
+        height: 70%;
+    }
+
+    body.dashboards .page-fotter .updated {
+        width: 130px;
+        font-size: 8px;
     }
 }
