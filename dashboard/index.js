@@ -25,6 +25,14 @@ $(function () {
         });
     });
 
+    $('.areas-small button.areas-menu-button').click(()=>{
+        $('.areas-small .areas-container').toggle();
+        return false;
+    })
+    $('body').click(()=>{
+        $('.areas-small .areas-container').hide();
+    })
+
     $.get('/updated.txt',data=>{
         $('.page-fotter').append($('<div class="updated">data update: '+data+'</div>'));
     })

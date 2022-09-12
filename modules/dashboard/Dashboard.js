@@ -241,7 +241,13 @@ class Dashboard {
     }
 
     _scroll() {
-        this.onChangeCallbacks.forEach(c => c());
+        if (this.scrollTimeout) {
+            clearInterval(this.scrollTimeout);
+        }
+        this.scrollTimeout = setTimeout(
+            () => this.onChangeCallbacks.forEach(c => c()),
+            !this.scrollTimeout ? 10 : 100
+        );
     }
 
     onChange(callback) {
@@ -267,14 +273,14 @@ class Dashboard {
                 .forEach(lau1 => {
                     lau1Select.append($('<option value="' + lau1.properties.code + '">' + lau1.properties.name + '</option>'))
                 });
-                    lau1Select.val(this.lau1?this.lau1:"all");
+            lau1Select.val(this.lau1 ? this.lau1 : "all");
         });
         const self = this;
         lau1Select.change(function () {
             self.lau1 = $(this).val();
             if (self.lau1 === 'all')
                 self.lau1 = undefined;
-            else cache4js.storeCache('dashboard_lau1',self.lau1);
+            else cache4js.storeCache('dashboard_lau1', self.lau1);
             self._change();
         });
 
@@ -288,7 +294,7 @@ class Dashboard {
         }
         yearSelect.change(function () {
             self.year = Number($(this).val());
-            cache4js.storeCache('dashboard_year',self.year);
+            cache4js.storeCache('dashboard_year', self.year);
             self._change();
         });
     }
@@ -387,13 +393,13 @@ class Dashboard {
         }).observe(chartElement[0]);
     }
 
-    _renderStackedBarChart(dataSeries, chartElement, xlabels, delayRender=false) {
+    _renderStackedBarChart(dataSeries, chartElement, xlabels = undefined) {
         const layout = JSON.parse(JSON.stringify(this.stackedBarChartLayout));
         layout.xaxis.type = 'category';
         const config = JSON.parse(JSON.stringify(this.chartConfig));
 
         let colorIndex = dataSeries.length - 1;
-        dataSeries.reverse().forEach(data => {
+        dataSeries.forEach(data => {
             data.x = xlabels ? xlabels : data.x.map(x => x + "")
             data.type = 'bar';
             data.barmode = 'stack';
@@ -404,13 +410,12 @@ class Dashboard {
             data.hovertemplate = "%{y:.2f}%";
         });
 
-        function relayout() {
-            Plotly.relayout(chartElement[0], {height: 280, autosize: true});
-        }
         Plotly.newPlot(chartElement[0], dataSeries, layout, config);
-        setTimeout(()=>{
-            new ResizeObserver(relayout).observe(chartElement[0]);
-        }, delayRender?1500:50);
+        setTimeout(() => {
+            new ResizeObserver(
+                () => Plotly.relayout(chartElement[0], {height: 280, autosize: true})
+            ).observe(chartElement[0]);
+        }, 500);
     }
 
     _renderLineChart(data, chartElement, min = undefined, max = undefined) {
@@ -423,7 +428,7 @@ class Dashboard {
         data.marker = {
             color: this.colors[0]
         };
-        data.hovertemplate = data.text?"%{text}":"%{y}<extra></extra>";
+        data.hovertemplate = data.text ? "%{text}" : "%{y}<extra></extra>";
 
 
         const sortedY = data.y.slice().sort((y1, y2) => y1 - y2);
@@ -752,7 +757,7 @@ class Dashboard {
                     .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
                     .map(f => f.total_area)
                     .reduce((a1, a2) => a1 + a2, 0);
-                elementTarget.empty().append($('<div class="number"><div class="value_">' + formatArea(sum) + '</div></div>')).addClass('number');
+                elementTarget.empty().append($('<div class="number"><div class="value_">' + formatArea(sum, true) + '</div></div>')).addClass('number');
                 setTimeout(() => $('.number .value_', elementTarget).addClass('value'), 100);
             };
             if (this.totalAreaData[this.year]) {
@@ -825,8 +830,8 @@ class Dashboard {
                 const data = {
                     x: [],
                     y: [],
-                    text:[],
-                    name:this.translator.translate("dashboard.series.name.totaAreaHistory")
+                    text: [],
+                    name: this.translator.translate("dashboard.series.name.totaAreaHistory")
                 }
                 for (let year in featuresByYear) {
                     if (year >= this.minYear && year <= this.maxYearHistory) {
@@ -841,7 +846,7 @@ class Dashboard {
                             });
                     }
                 }
-                data.text = data.text.map(t=>formatArea(t));
+                data.text = data.text.map(t => formatArea(t));
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
                 this._renderLineChart(data, chartElement, 0);
@@ -961,7 +966,7 @@ class Dashboard {
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-                const data = this._getCountsByCauseType(features, 'hour', hours);
+                const data = this._getCountsByCauseType(features, 'hour', hours).reverse();
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
                 this._renderStackedBarChart(data, chartElement, hours.map(h => h.pad(2) + 'h'));
@@ -991,7 +996,7 @@ class Dashboard {
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                const data = this._getCountsByCauseType(features, 'month', months);
+                const data = this._getCountsByCauseType(features, 'month', months).reverse();
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
                 this._renderStackedBarChart(data, chartElement);
@@ -1016,6 +1021,8 @@ class Dashboard {
 
     _initHistoryCause() {
         const chartTarget = $('.cause.history .body', this.target);
+        if (!this.historyCauseData)
+            this.historyCauseData = {};
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = featuresByYear => {
                 const features = Object.keys(featuresByYear)
@@ -1023,20 +1030,20 @@ class Dashboard {
                 const years = [];
                 for (let i = this.minYear; i <= this.maxYearHistory; i++)
                     years.push(i);
-                const data = this._getCountsByCauseType(features, 'year', years);
+                const data = this._getCountsByCauseType(features, 'year', years).reverse();
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderStackedBarChart(data, chartElement,undefined,true);
+                this._renderStackedBarChart(data, chartElement);
             };
-            if (this.totalCauseData[this.year]) {
-                afterFetch(this.totalCauseData);
+            if (this.historyCauseData[this.year]) {
+                afterFetch(this.historyCauseData);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardCauseTypeYearlyUrl.format(["0"])
                 }, 1 * 60 * 60).done(data => {
-                    this._fillHistoryFromFeatures(data, this.totalCauseData);
+                    this._fillHistoryFromFeatures(data, this.historyCauseData);
                     try {
-                        afterFetch(this.totalCauseData);
+                        afterFetch(this.historyCauseData);
                     } catch (e) {
                         if (e === 'NO_DATA')
                             this._addNoDataMessage(elementTarget)
@@ -1291,34 +1298,34 @@ class Dashboard {
     }
 
 
-    _initShare(){
+    _initShare() {
         this.shareModal = new ModalHalf(this.translator, $('body'), 'share_modal');
         const self = this;
-        $('.share-container button.share-button').click(function (){
+        $('.share-container button.share-button').click(function () {
             self.shareModal.setTitle(self.translator.translate('dashboard.share.title'));
-            const dashboardUrl = self.config.dashboardUrl+'?year={0}{1}'.format([
-                ""+self.year,
-                self.lau1?("&lau1="+self.lau1):""
+            const dashboardUrl = self.config.dashboardUrl + '?year={0}{1}'.format([
+                "" + self.year,
+                self.lau1 ? ("&lau1=" + self.lau1) : ""
             ]);
-            const twitterUrl = 'https://twitter.com/intent/tweet?text='+
-                self.translator.translate('dashboard.share.twitter.text')+"&url=" +
+            const twitterUrl = 'https://twitter.com/intent/tweet?text=' +
+                self.translator.translate('dashboard.share.twitter.text') + "&url=" +
                 encodeURIComponent(dashboardUrl);
 
             const shareContent = $(
-                '<div>'+
-                '   <div class="context">'+self.translator.translate('dashboard.share.context')+'</div>' +
-                '   <div class="share-url share-element"><label>'+self.translator.translate('dashboard.share.url')+'<br/><input type="text" readonly value="'+ dashboardUrl+'"></label></div>'+
+                '<div>' +
+                '   <div class="context">' + self.translator.translate('dashboard.share.context') + '</div>' +
+                '   <div class="share-url share-element"><label>' + self.translator.translate('dashboard.share.url') + '<br/><input type="text" readonly value="' + dashboardUrl + '"></label></div>' +
                 '   <div class="share-twitter share-element">' +
-                '      <label>'+self.translator.translate('dashboard.share.twitter')+'</label><br/>' +
-                '      <button class="tweet-button" type="button"><i class="fa-brands fa-square-twitter"></i></button>'+
-                '   </div>'+
+                '      <label>' + self.translator.translate('dashboard.share.twitter') + '</label><br/>' +
+                '      <button class="tweet-button" type="button"><i class="fa-brands fa-square-twitter"></i></button>' +
+                '   </div>' +
                 '</div>'
             );
-            $('.share-url input',shareContent).click(function (){
+            $('.share-url input', shareContent).click(function () {
                 $(this).select();
             });
-            $('button.tweet-button',shareContent).click(function (){
-                window.open(twitterUrl,'_blank');
+            $('button.tweet-button', shareContent).click(function () {
+                window.open(twitterUrl, '_blank');
             });
             self.shareModal.setContent(shareContent);
             self.shareModal.show();

@@ -51,6 +51,19 @@ function transformExtent(extent, sourceProjCode, targetProjCode) {
 
 class FireMap {
 
+    chartColors = [
+        '#809A6F',
+        '#a25b5b',
+        '#96ab88',
+        '#b47877',
+        '#acbca1',
+        '#c49594',
+        '#c3cdbb',
+        '#d4b3b2',
+        '#d9dfd6',
+        '#e3d2d1',
+    ];
+
     constructor(locale, translations, config, targetId, logger) {
         LOGGER = logger;
         this.translator = new Translator(locale, translations);
@@ -1079,7 +1092,7 @@ class FireMap {
 
                     data.type = 'bar';
                     data.marker = {
-                        color: '#809A6F'
+                        color: self.chartColors[0]
                     };
 
                     const chartTarget = $('.body', container)[0];
@@ -1190,6 +1203,9 @@ class FireMap {
 
                     const chartTarget = $('.body', container)[0];
 
+                    data.marker = {
+                        colors: self.chartColors
+                    };
 
                     Plotly.newPlot(chartTarget, [data], layout, config);
 

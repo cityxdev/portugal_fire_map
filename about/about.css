@@ -18,7 +18,7 @@ body {
     height: 100%;
     width: 100%;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
-    background-color: #D5D8B5;
+    background-color: rgba(213, 216, 181, 0.75);
     position: relative;
 }
 
@@ -131,7 +131,7 @@ a:hover{
     position: absolute;
     bottom:0;
     left: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(213,216,181,1) 60%);
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #dfe1c7 60%);
 }
 
 .page-body{

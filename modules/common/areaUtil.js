@@ -10,13 +10,13 @@ const MERGE_MIN_THRESHOLD = 0.015;
 
 export const MIN_VALID_AREA = 10;
 
-export function formatArea(area) {
+export function formatArea(area,roundNoDecimals=false) {
     if (area === undefined || area === null || area < MIN_VALID_AREA)
         return '--';
     return area > AREA_MAX_HA_THRESHOLD
-        ? (Number(((area / 1e+6).toFixed(2))).toLocaleString() + 'km<sup>2</sup>')
+        ? (Number(((area / 1e+6).toFixed(roundNoDecimals?0:2))).toLocaleString() + 'km<sup>2</sup>')
         : (area > AREA_MAX_M2_THRESHOLD
-            ? (Number(((area / 10_000).toFixed(2))).toLocaleString() + 'ha')
+            ? (Number(((area / 10_000).toFixed(roundNoDecimals?0:2))).toLocaleString() + 'ha')
             : (Number(area.toFixed(0)).toLocaleString() + 'm<sup>2</sup>'));
 }
 

@@ -53,11 +53,11 @@ body {
 }
 
 .page-header .title {
-    margin-top: 2px;
+    margin-top: 5px;
     margin-left: 5px;
 }
 .page-header .title h1{
-    font-size: 20px;
+    font-size: 18px;
     color: white;
     margin: 0;
 }
@@ -303,6 +303,9 @@ body {
     right: 50px;
     bottom: 50px;
     pointer-events: auto;
+}
+.fire-map .ol-touch .share-button-container {
+    bottom: 55px
 }
 .fire-map .share-button-container button.share-button{
     font-size: 18px;
