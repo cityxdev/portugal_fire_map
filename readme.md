@@ -1,6 +1,7 @@
 # Portugal fire map
 
 This is a webmap to show the wildfires in Portugal since 2001. Data comes from [here](https://github.com/cityxdev/icnf_fire_data)
+<br/><br/>**Deployed here: [statincendios.pt](statincendios.pt)** 
 
 ## Pre-req
 1. `sudo apt install docker.io`
