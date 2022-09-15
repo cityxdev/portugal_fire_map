@@ -17,7 +17,7 @@ body.dashboards {
     margin: 0;
     height: 100%;
     width: 100%;
-    font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+    font-family: 'Lucida Sans Unicode', sans-serif;
     background-color: rgba(213, 216, 181, 0.75);
     position: relative;
 }
@@ -180,11 +180,25 @@ body.dashboards .page-header.top .header-content .controls {
     bottom: -4px;
     height: 100%;
 }
+html.win body.dashboards .page-header.top .header-content .controls {
+    bottom: unset;
+    top: -22px;
+    height: 100%;
+}
 @-moz-document url-prefix() {
     body.dashboards .page-header.top .header-content .controls {
         bottom: -2px;
     }
+    html.win body.dashboards .page-header.top .header-content .controls {
+        bottom: unset;
+        top: -17px;
+        height: 100%;
+    }
+    html.win body.dashboards .page-header .header-content h1 {
+        margin-top: -7px;
+    }
 }
+
 body.dashboards .page-header .header-content .controls>*:not(:first-child) {
     margin-left: 5px;
 }

@@ -1,0 +1,3 @@
+http://statincendios.pt/dashboard
+http://statincendios.pt/map
+http://statincendios.pt/about

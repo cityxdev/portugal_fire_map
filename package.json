@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "parcel",
-    "copy": "mkdir -p dist/config ; cp -R config/* dist/config ; mkdir -p dist/img ; cp -R img/* dist/img ; cp favicon.ico dist/",
+    "copy": "mkdir -p dist/config ; cp -R config/* dist/config ; mkdir -p dist/img ; cp -R img/* dist/img ; cp favicon.ico dist/ ; cp sitemap.txt dist/",
     "build": "parcel build ./"
   },
   "keywords": [],
