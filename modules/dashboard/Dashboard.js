@@ -278,9 +278,10 @@ class Dashboard {
         const self = this;
         lau1Select.change(function () {
             self.lau1 = $(this).val();
-            if (self.lau1 === 'all')
+            if (self.lau1 === 'all') {
                 self.lau1 = undefined;
-            else cache4js.storeCache('dashboard_lau1', self.lau1);
+                cache4js.removeCache('dashboard_lau1');
+            } else cache4js.storeCache('dashboard_lau1', self.lau1);
             self._change();
         });
 
