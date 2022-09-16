@@ -17,7 +17,7 @@ body.dashboards {
     margin: 0;
     height: 100%;
     width: 100%;
-    font-family: 'Lucida Sans Unicode', sans-serif;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
     background-color: rgba(213, 216, 181, 0.75);
     position: relative;
 }
