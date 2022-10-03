@@ -205,6 +205,9 @@ class Dashboard {
     }
 
     run() {
+        if(this.isMobileDevice)
+            this.target.addClass('mobile-device');
+
         this._initFilters();
 
         this._initTotalIgnition();

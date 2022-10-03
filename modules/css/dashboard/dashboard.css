@@ -255,6 +255,18 @@ body.dashboards .page-body .dashboards .context{
 body.dashboards .page-body .dashboards .group>.context{
     font-size: 14px;
 }
+body.dashboards .page-body .dashboards .group>.help {
+    color: #666666;
+    font-size: 10px;
+    font-family: monospace;
+}
+body.dashboards .page-body .dashboards.mobile-device .group>.help.desktop-help {
+    display: none;
+}
+body.dashboards .page-body .dashboards:not(.mobile-device) .group>.help.mobile-help {
+    display: none;
+}
+
 body.dashboards .page-body .dashboards .group .body{
     width: 100%;
 }
