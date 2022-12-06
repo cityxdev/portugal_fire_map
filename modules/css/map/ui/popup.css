@@ -22,6 +22,9 @@
     color: white;
     height: 100%;
 }
+html.win .fire-map .popup .popup-header .popup-title {
+    width: calc(100% - 37px);
+}
 
 .fire-map .popup .popup-header .popup-buttons-container {
     display: inline-block;

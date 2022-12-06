@@ -87,6 +87,9 @@
     padding: 0 9px 0 13px;
     z-index: 1;
 }
+html.win .fire-map .sliders-container .sliders .slider-container .slider-ticks {
+    margin-top: -8px;
+}
 @-moz-document url-prefix() {
     .fire-map .sliders-container .sliders .slider-container .slider-ticks {
         margin-top: -6px;

@@ -185,6 +185,10 @@ html.win body.dashboards .page-header.top .header-content .controls {
     top: -22px;
     height: 100%;
 }
+
+html.win body.dashboards .page-header .header-content h1 {
+    line-height: 100%;
+}
 @-moz-document url-prefix() {
     body.dashboards .page-header.top .header-content .controls {
         bottom: -2px;
