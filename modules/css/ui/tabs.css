@@ -1,0 +1,37 @@
+.tabs-elements {
+    height: 100%;
+}
+.tabs-container {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    height: 25px;
+}
+
+.tabs-container .tab {
+    display: inline-block;
+    padding-bottom: 2px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    color: #A25B5B;
+    padding-top: 5px;
+    border-bottom: 1px solid rgba(128, 154, 111, .25);
+}
+
+.tabs-container .tab.selected {
+    color: #A25B5B;
+    font-weight: bold;
+    border-bottom: 2px solid rgba(128, 154, 111, .5);
+}
+
+.tab-panel {
+    display: none;
+    margin-top: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.tab-panel.selected {
+    display: block;
+}

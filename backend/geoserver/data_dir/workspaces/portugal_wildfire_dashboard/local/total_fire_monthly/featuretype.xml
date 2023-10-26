@@ -30,7 +30,7 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>total_fire_monthly</name>
-        <sql>SELECT * FROM dashboard.total_fire_montlhy WHERE %year%=0 OR year=%year%
+        <sql>SELECT * FROM dashboard.total_fire_monthly WHERE %year%=0 OR year=%year%
 </sql>
         <escapeSql>false</escapeSql>
         <parameter>

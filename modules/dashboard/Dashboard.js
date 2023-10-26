@@ -8,6 +8,7 @@ import {formatDuration} from "../common/durationUtil";
 import {NiceScale} from "./NiceScale";
 import {ModalHalf} from "../common/ui/Modal";
 import isMobile from "is-mobile";
+import {TabsElement} from "../common/ui/tabs";
 
 
 let LOGGER;
@@ -16,10 +17,10 @@ class Dashboard {
 
     colors = [
         '#809A6F',
-        '#a25b5b',
+        '#D5D8B5',
         '#96ab88',
         '#b47877',
-        '#acbca1',
+        '#A6A6A6',
         '#c49594',
         '#c3cdbb',
         '#d4b3b2',
@@ -66,6 +67,8 @@ class Dashboard {
     }
 
     lineChartLayout = {
+        hovermode: 'x unified',
+        hoverlabel: {bgcolor: "#EEEEEE"},
         autosize: true,
         height: 250,
         margin: {
@@ -88,7 +91,12 @@ class Dashboard {
             tickfont: {
                 size: 10
             },
-            fixedrange: true
+            fixedrange: true,
+            showspikes: true,
+            spikemode: 'toaxis+across+marker',
+            spikesnap: 'hovered data',
+            spikedash: 'dot',
+            spikethickness: -2, //hack to remove halo
         },
         yaxis: {
             zerolinewidth: 0.5,
@@ -99,7 +107,13 @@ class Dashboard {
             tickfont: {
                 size: 10
             },
-            fixedrange: true
+            fixedrange: true,
+            showspikes: true,
+            spikemode: 'toaxis+across',
+            spikesnap: 'cursor',
+            spikedash: 'dot',
+            spikethickness: -2, //hack to remove halo
+            spikecolor: 'rgba(40,110,159,.5)'
         }
     }
 
@@ -169,6 +183,8 @@ class Dashboard {
             },
             paper_bgcolor: "rgba(0,0,0,0)",
             plot_bgcolor: "rgba(0,0,0,0)",
+            hovermode: 'x unified',
+            hoverlabel: {bgcolor: "#EFEFEF"},
             showlegend: true,
             legend: {
                 orientation: "h",
@@ -186,7 +202,8 @@ class Dashboard {
                 tickfont: {
                     size: 10
                 },
-                fixedrange: true
+                fixedrange: true,
+                showspikes: false
             },
             yaxis: {
                 tickvals: [0, 20, 40, 60, 80, 100],
@@ -205,7 +222,7 @@ class Dashboard {
     }
 
     run() {
-        if(this.isMobileDevice)
+        if (this.isMobileDevice)
             this.target.addClass('mobile-device');
 
         this._initFilters();
@@ -361,7 +378,39 @@ class Dashboard {
             .forEach(f => historyTargetObj[f.year].push(f))
     }
 
-    _renderBarChart(data, chartElement, min = undefined, max = undefined) {
+    _downloadStackedData(data, xname, name) {
+        const rows = [];
+        rows.push([xname].concat(data.y.map(y => y.name)));
+        for (let i = 0; i < data.x.length; i++) {
+            const y = data.y.map(y => y.y[i]);
+            rows.push([data.x[i]].concat(y));
+        }
+        this._downloadData(rows, name);
+    }
+
+    _downloadBarOrLineData(data, xname, name) {
+        const rows = [];
+        rows.push([xname, 'value']);
+        for (let i = 0; i < data.x.length; i++) {
+            const y = []
+            y.push(data.y[i]);
+            rows.push([data.x[i]].concat(y));
+        }
+        this._downloadData(rows, name);
+    }
+
+    _downloadData(rows, name) {
+        const encodedUri = encodeURI("data:text/csv;charset=utf-8," + rows.map(r => r.join(',')).join("\n"));
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", name + ".csv");
+        document.body.appendChild(link); // Required for FF
+        link.click();
+        link.remove();
+    }
+
+
+    _renderBarChart(data, chartElement, min = undefined, max = undefined, xname = "category", name = "chart_data") {
         const layout = JSON.parse(JSON.stringify(this.barChartLayout));
         layout.xaxis.type = 'category';
         const config = JSON.parse(JSON.stringify(this.chartConfig));
@@ -395,9 +444,14 @@ class Dashboard {
         new ResizeObserver(function () {
             Plotly.relayout(chartElement[0], {height: 250, autosize: true});
         }).observe(chartElement[0]);
+        chartElement.append(
+            $('<button type="button" title="' + this.translator.translate('dashboard.chart.download.csv') + '" class="download-csv-button" ><i class="fa-solid fa-download"></i></button>').click(() => {
+                this._downloadBarOrLineData({x: data.x, y: data.y}, xname, name);
+            })
+        );
     }
 
-    _renderStackedBarChart(dataSeries, chartElement, xlabels = undefined) {
+    _renderStackedBarChart(dataSeries, chartElement, xlabels = undefined, xname = "category", name = "chart_data") {
         const layout = JSON.parse(JSON.stringify(this.stackedBarChartLayout));
         layout.xaxis.type = 'category';
         const config = JSON.parse(JSON.stringify(this.chartConfig));
@@ -420,18 +474,23 @@ class Dashboard {
                 () => Plotly.relayout(chartElement[0], {height: 280, autosize: true})
             ).observe(chartElement[0]);
         }, 500);
+
+        chartElement.append(
+            $('<button type="button" title="' + this.translator.translate('dashboard.chart.download.csv') + '" class="download-csv-button" ><i class="fa-solid fa-download"></i></button>').click(() => {
+                this._downloadStackedData({x: dataSeries[0].x, y: dataSeries}, xname, name);
+            })
+        ).addClass('bottom-legend');
     }
 
-    _renderLineChart(data, chartElement, min = undefined, max = undefined) {
+    _renderLineChart(data, chartElement, min = undefined, max = undefined, xname = "time", name = "chart_data") {
         const layout = JSON.parse(JSON.stringify(this.lineChartLayout));
         layout.xaxis.type = 'category';
         const config = JSON.parse(JSON.stringify(this.chartConfig));
 
-        data.type = 'line';
-        data.line = {shape: 'spline', smoothing: 0.75};
-        data.marker = {
-            color: this.colors[0]
-        };
+        data.type = "line";
+        data.mode = "lines+markers";
+        data.line = {shape: 'spline', smoothing: 0.65, color: this.colors[0], size: 3};
+        data.marker = {color: this.colors[0], size: 5};
         data.hovertemplate = data.text ? "%{text}" : "%{y}<extra></extra>";
 
 
@@ -448,6 +507,7 @@ class Dashboard {
                     x: data.x,
                     y: data.y.slice(0, i + 1).concat(data.y.slice(i + 1, data.y.length).map(() => null)),
                     type: data.type,
+                    mode: data.mode,
                     line: data.line,
                     text: data.text,
                     name: data.name,
@@ -486,9 +546,14 @@ class Dashboard {
         new ResizeObserver(function () {
             Plotly.relayout(chartElement[0], {height: 250, autosize: true});
         }).observe(chartElement[0]);
+        chartElement.append(
+            $('<button type="button" title="' + this.translator.translate('dashboard.chart.download.csv') + '" class="download-csv-button" ><i class="fa-solid fa-download"></i></button>').click(() => {
+                this._downloadBarOrLineData({x: data.x, y: data.y}, xname, name);
+            })
+        );
     }
 
-    _renderAdvancedLineChart(dataSeries, chartElement, min = undefined, max = undefined, yAxisTicks) {
+    _renderAdvancedLineChart(dataSeries, chartElement, min = undefined, max = undefined, yAxisTicks, xname = "time", name = "chart_data") {
         const layout = JSON.parse(JSON.stringify(this.lineChartLayout));
         layout.xaxis.type = 'category';
         layout.showlegend = dataSeries.length > 1;
@@ -498,11 +563,10 @@ class Dashboard {
         let chartMin = min !== undefined ? min : Number.MAX_VALUE,
             chartMax = max !== undefined ? max : Number.MIN_VALUE;
         dataSeries.forEach(d => {
-            d.type = 'line';
-            d.line = {shape: 'spline', smoothing: 0.75};
-            d.marker = {
-                color: this.colors[c++]
-            };
+            d.mode = "lines+markers";
+            const color = this.colors[c++];
+            d.line = {shape: 'spline', smoothing: 0.75, color: color, size: 2};
+            d.marker = {color: color, size: 4};
             d.hovertemplate = "%{text}";
 
             if (!yAxisTicks) {
@@ -524,6 +588,14 @@ class Dashboard {
         new ResizeObserver(function () {
             Plotly.relayout(chartElement[0], {height: 250, autosize: true});
         }).observe(chartElement[0]);
+        chartElement.append(
+            $('<button type="button" title="' + this.translator.translate('dashboard.chart.download.csv') + '" class="download-csv-button" ><i class="fa-solid fa-download"></i></button>').click(() => {
+                this._downloadBarOrLineData({
+                    x: dataSeries[dataSeries.length - 1].x,
+                    y: dataSeries[dataSeries.length - 1].y
+                }, xname, name);
+            })
+        );
     }
 
     _renderPieChart(data, chartElement) {
@@ -587,6 +659,49 @@ class Dashboard {
         }).observe(chartElement[0]);
     }
 
+    _renderBoxPlot(min, p25, med, p75, max, boxplotContainer) {
+        return new org.cityxdev.boxplot.BoxPlot({
+            hideLegend: true,
+            values: {
+                min: min,
+                p25: p25,
+                p50: med,
+                p75: p75,
+                max: max < p75 * 4 ? max : undefined,
+                decimalPlaces: 2
+            },
+            $target: boxplotContainer,
+            style: {
+                height: '35px',
+                width: '100%',
+                borderColor: '#809A6F',
+                borderWidthPx: 2,
+
+                medColor: '#A25B5B',
+                medWidthPx: 2,
+
+                boxBorderColor: '#809A6F',
+                boxWidthPx: 2,
+                boxBackgroundColor: 'white',
+
+                legendLabelColor: '#809A6F',
+                legendValueColor: '#495057',
+                legendBackgroundColor: 'white',
+                legendBorderColor: '#809A6F',
+                legendBorderWidthPx: 2
+            },
+            translation: {
+                min: 'min',
+                q1: 'Q1',
+                med: 'med',
+                q3: 'Q3',
+                max: 'max',
+                iqr: 'IIQ'
+            }
+        });
+    }
+
+
 
     _initTotalIgnition() {
         const chartTarget = $('.ignition.counter .body', this.target);
@@ -607,7 +722,7 @@ class Dashboard {
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalFireYearlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.totalFireData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.totalFireData[this.year]);
@@ -643,14 +758,14 @@ class Dashboard {
                     });
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderBarChart(data, chartElement, 0);
+                this._renderBarChart(data, chartElement, 0, undefined, "hora", "ignicoes_por_hora");
             };
             if (this.hourlyFireData[this.year]) {
                 afterFetch(this.hourlyFireData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalFireHourlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.hourlyFireData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.hourlyFireData[this.year]);
@@ -686,14 +801,14 @@ class Dashboard {
                     });
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderBarChart(data, chartElement, 0);
+                this._renderBarChart(data, chartElement, 0, undefined, "mes", "ignicoes_por_mes");
             };
             if (this.monthlyFireData[this.year]) {
                 afterFetch(this.monthlyFireData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalFireMonthlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.monthlyFireData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.monthlyFireData[this.year]);
@@ -729,7 +844,7 @@ class Dashboard {
                 }
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderLineChart(data, chartElement, 0);
+                this._renderLineChart(data, chartElement, 0, undefined, "ano", "historico_ignicoes");
             };
 
             if (this._verifyHistoryData(this.totalFireData)) {
@@ -737,7 +852,7 @@ class Dashboard {
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalFireYearlyUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.totalFireData);
                     try {
                         afterFetch(this.totalFireData);
@@ -757,19 +872,37 @@ class Dashboard {
             this.totalAreaData = {};
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
-                const sum = features
-                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
-                    .map(f => f.total_area)
-                    .reduce((a1, a2) => a1 + a2, 0);
-                elementTarget.empty().append($('<div class="number"><div class="value_">' + formatArea(sum, true) + '</div></div>')).addClass('number');
-                setTimeout(() => $('.number .value_', elementTarget).addClass('value'), 100);
+                const filtered = features.filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
+                const sum = filtered.map(f => f.total_area).reduce((a1, a2) => a1 + a2, 0);
+                const p25 = calcMean(filtered.map(f=>f.p25_area));
+                const med = calcMean(filtered.map(f=>f.median_area));
+                const p75 = calcMean(filtered.map(f=>f.p75_area));
+                const min = Math.min.apply(Math,filtered.map(f => f.min_area));
+                const max = Math.max.apply(Math,filtered.map(f => f.max_area));
+
+                const element = $(
+                    '<div class="number three-values">' +
+                    '   <div class="value_ main"><div class="header">' + this.translator.translate("area.total") + '</div>' + formatArea(sum, true) + '</div>' +
+                    '   <div class="value_"><div class="header">' + this.translator.translate("area.mean") + '</div>' + formatArea(med, true) + '</div>' +
+                    '   <div class="value_"><div class="header">' + this.translator.translate("area.max") + '</div>' + formatArea(max, true) + '</div>' +
+                    '</div>');
+
+
+                elementTarget.empty().append(element).addClass('number');
+
+                setTimeout(() => {
+                    $('.number .value_', elementTarget).addClass('value');
+                    const boxplotContainer = $('<div class="boxplot-container"></div>');
+                    element.append(boxplotContainer);
+                    let bp = this._renderBoxPlot(min, p25, med, p75, max, boxplotContainer);
+                }, 100);
             };
             if (this.totalAreaData[this.year]) {
                 afterFetch(this.totalAreaData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalAreaYearlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.totalAreaData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.totalAreaData[this.year]);
@@ -781,7 +914,7 @@ class Dashboard {
             }
         });
     }
-
+    
     _initMonthlyArea() {
         const chartTarget = $('.area.monthly .body', this.target);
         if (!this.monthlyAreaData)
@@ -805,14 +938,14 @@ class Dashboard {
                     });
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderBarChart(data, chartElement, 0);
+                this._renderBarChart(data, chartElement, 0, undefined, "mes", "area_por_mes");
             };
             if (this.monthlyAreaData[this.year]) {
                 afterFetch(this.monthlyAreaData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalAreaMonthlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.monthlyAreaData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.monthlyAreaData[this.year]);
@@ -853,7 +986,7 @@ class Dashboard {
                 data.text = data.text.map(t => formatArea(t));
                 const chartElement = $('<div class="chart"></div>');
                 elementTarget.empty().append(chartElement);
-                this._renderLineChart(data, chartElement, 0);
+                this._renderLineChart(data, chartElement, 0, undefined, "ano", "historico_area");
             };
 
             if (this._verifyHistoryData(this.totalAreaData)) {
@@ -861,7 +994,7 @@ class Dashboard {
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalAreaYearlyUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.totalAreaData);
                     try {
                         afterFetch(this.totalAreaData);
@@ -875,8 +1008,9 @@ class Dashboard {
     }
 
 
-    _getCountsByCauseType(features, periodName = undefined, periodGroups = undefined) {
+    _getByCauseType(features, periodName = undefined, periodGroups = undefined) {
         const counts = {};
+        const areas = {};
         features = features.filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
         if (features.length === 0)
             throw 'NO_DATA';
@@ -888,32 +1022,52 @@ class Dashboard {
             "UNKNOWN"
         ];
         if (periodGroups && periodName) {
-            order.forEach(o => counts[o] = {});
+            order.forEach(o => {
+                counts[o] = {};
+                areas[o] = {}
+            });
             features.forEach(f => {
                 const causeType = f.cause_type_code ? f.cause_type_code : 'UNKNOWN';
                 counts[causeType][f[periodName]] = (counts[causeType][f[periodName]] ? counts[causeType][f[periodName]] : 0) + f.count;
+                areas[causeType][f[periodName]] = (areas[causeType][f[periodName]] ? areas[causeType][f[periodName]] : 0) + f.area;
             });
             const res = [];
-            let sums = {};
+            let sumCounts = {};
+            let sumAreas = {};
             for (let ct in order) {
-                const data = {x: [], y: [], name: this.translator.translate('fire.ref.cause_type.' + order[ct])};
+                const data = {
+                    x: [],
+                    yCount: [],
+                    yArea: [],
+                    name: this.translator.translate('fire.ref.cause_type.' + order[ct])
+                };
                 res.push(data);
                 if (counts[order[ct]]) {
                     periodGroups.forEach(p => {
                         data.x.push(p);
                         const count = counts[order[ct]][p] ? counts[order[ct]][p] : 0;
-                        if (!sums[p])
-                            sums[p] = 0;
-                        sums[p] += count;
-                        data.y.push(count);
+                        if (!sumCounts[p])
+                            sumCounts[p] = 0;
+                        sumCounts[p] += count;
+                        data.yCount.push(count);
+
+                        const area = areas[order[ct]][p] ? areas[order[ct]][p] : 0;
+                        if (!sumAreas[p])
+                            sumAreas[p] = 0;
+                        sumAreas[p] += area;
+                        data.yArea.push(area);
                     });
                 }
             }
             for (let ct in order) {
-                for (let i = 0; i < periodGroups.length; i++)
-                    res[ct].y[i] = res[ct].y[i] === 0
+                for (let i = 0; i < periodGroups.length; i++) {
+                    res[ct].yCount[i] = res[ct].yCount[i] === 0
                         ? 0
-                        : (res[ct].y[i] / sums[periodGroups[i]] * 100).round(2)
+                        : (res[ct].yCount[i] / sumCounts[periodGroups[i]] * 100).round(2);
+                    res[ct].yArea[i] = res[ct].yArea[i] === 0
+                        ? 0
+                        : (res[ct].yArea[i] / sumAreas[periodGroups[i]] * 100).round(2);
+                }
             }
             return res;
 
@@ -921,12 +1075,14 @@ class Dashboard {
             features.forEach(f => {
                 const causeType = f.cause_type_code ? f.cause_type_code : 'UNKNOWN';
                 counts[causeType] = (counts[causeType] ? counts[causeType] : 0) + f.count;
+                areas[causeType] = (areas[causeType] ? areas[causeType] : 0) + f.area;
             });
-            const res = {labels: [], values: []};
+            const res = {labels: [], valuesAreas: [], valuesCounts: []};
             for (let o in order) {
                 if (counts[order[o]]) {
                     res.labels.push(this.translator.translate('fire.ref.cause_type.' + order[o]));
-                    res.values.push(counts[order[o]]);
+                    res.valuesCounts.push(counts[order[o]]);
+                    res.valuesAreas.push(areas[order[o]]);
                 }
             }
             return res;
@@ -934,23 +1090,45 @@ class Dashboard {
 
     }
 
+    _initCountAndAreaTabs() {
+        const chartElementCounts = $('<div class="chart counts"></div>');
+        const chartElementAreas = $('<div class="chart areas"></div>');
+        const tabsElement = new TabsElement(
+            this.translator,
+            this.isMobileDevice,
+            'totalCause',
+            ['count', 'area'],
+            [this.translator.translate("dashboard.cause.count"), this.translator.translate("dashboard.cause.area")],
+            [chartElementCounts, chartElementAreas]
+        );
+        return {chartElementCounts, chartElementAreas, tabsElement};
+    }
+
     _initTotalCause() {
-        const chartTarget = $('.cause.year .body', this.target);
+        const chartTarget = $('.cause.year .body', this.target).addClass('tabbed');
         if (!this.totalCauseData)
             this.totalCauseData = {};
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
-                const data = this._getCountsByCauseType(features);
-                const chartElement = $('<div class="chart"></div>');
-                elementTarget.empty().append(chartElement);
-                this._renderPieChart(data, chartElement);
+                const data = this._getByCauseType(features);
+                const {chartElementCounts, chartElementAreas, tabsElement} = this._initCountAndAreaTabs();
+                tabsElement.onSelectTab(0, () => this._renderPieChart({
+                    labels: data.labels,
+                    values: data.valuesCounts
+                }, chartElementCounts));
+                tabsElement.onSelectTab(1, () => this._renderPieChart({
+                    labels: data.labels,
+                    values: data.valuesAreas.map(v => (v / 10000).round(2))
+                }, chartElementAreas));
+                elementTarget.empty().append(tabsElement.getUIElement());
+                tabsElement.selectTab(0);
             };
             if (this.totalCauseData[this.year]) {
                 afterFetch(this.totalCauseData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardCauseTypeYearlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.totalCauseData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.totalCauseData[this.year]);
@@ -964,23 +1142,27 @@ class Dashboard {
     }
 
     _initHourlyCause() {
-        const chartTarget = $('.cause.hourly .body', this.target);
+        const chartTarget = $('.cause.hourly .body', this.target).addClass('tabbed');
         if (!this.hourlyCauseData)
             this.hourlyCauseData = {};
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-                const data = this._getCountsByCauseType(features, 'hour', hours).reverse();
-                const chartElement = $('<div class="chart"></div>');
-                elementTarget.empty().append(chartElement);
-                this._renderStackedBarChart(data, chartElement, hours.map(h => h.pad(2) + 'h'));
+                const data = this._getByCauseType(features, 'hour', hours).reverse();
+                const dataCount = data.map(d => ({x: d.x, y: d.yCount, name: d.name}));
+                const dataArea = data.map(d => ({x: d.x, y: d.yArea, name: d.name}));
+                const {chartElementCounts, chartElementAreas, tabsElement} = this._initCountAndAreaTabs();
+                tabsElement.onSelectTab(0, () => this._renderStackedBarChart(dataCount, chartElementCounts, hours.map(h => h.pad(2) + 'h'), "hora", "ignicoes_causas_por_hora"));
+                tabsElement.onSelectTab(1, () => this._renderStackedBarChart(dataArea, chartElementAreas, hours.map(h => h.pad(2) + 'h'), "hora", "areas_causas_por_hora"));
+                elementTarget.empty().append(tabsElement.getUIElement());
+                tabsElement.selectTab(0);
             };
             if (this.hourlyCauseData[this.year]) {
                 afterFetch(this.hourlyCauseData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardCauseTypeHourlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.hourlyCauseData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.hourlyCauseData[this.year]);
@@ -994,23 +1176,27 @@ class Dashboard {
     }
 
     _initMonthlyCause() {
-        const chartTarget = $('.cause.monthly .body', this.target);
+        const chartTarget = $('.cause.monthly .body', this.target).addClass('tabbed');
         if (!this.monthlyCauseData)
             this.monthlyCauseData = {};
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                const data = this._getCountsByCauseType(features, 'month', months).reverse();
-                const chartElement = $('<div class="chart"></div>');
-                elementTarget.empty().append(chartElement);
-                this._renderStackedBarChart(data, chartElement);
+                const data = this._getByCauseType(features, 'month', months).reverse();
+                const dataCount = data.map(d => ({x: d.x, y: d.yCount, name: d.name}));
+                const dataArea = data.map(d => ({x: d.x, y: d.yArea, name: d.name}));
+                const {chartElementCounts, chartElementAreas, tabsElement} = this._initCountAndAreaTabs();
+                tabsElement.onSelectTab(0, () => this._renderStackedBarChart(dataCount, chartElementCounts, undefined, "mes", "ignicoes_causas_por_mes"));
+                tabsElement.onSelectTab(1, () => this._renderStackedBarChart(dataArea, chartElementAreas, undefined, "mes", "areas_causas_por_mes"));
+                elementTarget.empty().append(tabsElement.getUIElement());
+                tabsElement.selectTab(0);
             };
             if (this.monthlyCauseData[this.year]) {
                 afterFetch(this.monthlyCauseData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardCauseTypeMonthlyUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.monthlyCauseData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.monthlyCauseData[this.year]);
@@ -1024,7 +1210,7 @@ class Dashboard {
     }
 
     _initHistoryCause() {
-        const chartTarget = $('.cause.history .body', this.target);
+        const chartTarget = $('.cause.history .body', this.target).addClass('tabbed');
         if (!this.historyCauseData)
             this.historyCauseData = {};
         this._initElement(chartTarget, elementTarget => {
@@ -1034,17 +1220,21 @@ class Dashboard {
                 const years = [];
                 for (let i = this.minYear; i <= this.maxYearHistory; i++)
                     years.push(i);
-                const data = this._getCountsByCauseType(features, 'year', years).reverse();
-                const chartElement = $('<div class="chart"></div>');
-                elementTarget.empty().append(chartElement);
-                this._renderStackedBarChart(data, chartElement);
+                const data = this._getByCauseType(features, 'year', years).reverse();
+                const dataCount = data.map(d => ({x: d.x, y: d.yCount, name: d.name}));
+                const dataArea = data.map(d => ({x: d.x, y: d.yArea, name: d.name}));
+                const {chartElementCounts, chartElementAreas, tabsElement} = this._initCountAndAreaTabs();
+                tabsElement.onSelectTab(0, () => this._renderStackedBarChart(dataCount, chartElementCounts, undefined, "ano", "ignicoes_causas_historico"));
+                tabsElement.onSelectTab(1, () => this._renderStackedBarChart(dataArea, chartElementAreas, undefined, "ano", "areas_causas_historico"));
+                elementTarget.empty().append(tabsElement.getUIElement());
+                tabsElement.selectTab(0);
             };
             if (this.historyCauseData[this.year]) {
                 afterFetch(this.historyCauseData);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardCauseTypeYearlyUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.historyCauseData);
                     try {
                         afterFetch(this.historyCauseData);
@@ -1067,8 +1257,7 @@ class Dashboard {
         let hasData = false;
         for (let i = this.minYear; i <= this.maxYearHistory; i++) {
             const values = features[i]
-                .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
-                .filter(f => f.min > 1000 * 60 && f.max < 1000 * 60 * 60 * 24 * 60); //between 1 min and 60 days
+                .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
             hasData = hasData || values.length > 0;
             dataMean.x.push(i);
             dataMean.y.push(values.length > 0 ? calcMean(values.map(v => v.median)) : null);
@@ -1092,13 +1281,14 @@ class Dashboard {
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const values = features
-                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
-                    .filter(f => f.min > 1000 * 60 && f.max < 1000 * 60 * 60 * 24 * 60); //between 1 min and 60 days
+                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
                 if (values.length === 0)
                     throw 'NO_DATA';
                 const min = Math.min.apply(Math, values.map(v => v.min));
                 const max = Math.max.apply(Math, values.map(v => v.max));
+                const p25 = calcMean(values.map(v => v.p25));
                 const mean = calcMean(values.map(v => v.median));
+                const p75 = calcMean(values.map(v => v.p75));
                 const numbers = $(
                     '<div class="number three-values">' +
                     '   <div class="value_ main"><div class="header">' + this.translator.translate("duration.mean") + '</div>' + formatDuration(mean) + '</div>' +
@@ -1106,14 +1296,19 @@ class Dashboard {
                     '   <div class="value_"><div class="header">' + this.translator.translate("duration.max") + '</div>' + formatDuration(max) + '</div>' +
                     '</div>');
                 elementTarget.empty().append(numbers).addClass('number');
-                setTimeout(() => $('.number .value_', elementTarget).addClass('value'), 100);
+                setTimeout(() => {
+                    $('.number .value_', elementTarget).addClass('value');
+                    const boxplotContainer = $('<div class="boxplot-container"></div>');
+                    elementTarget.append(boxplotContainer);
+                    let bp = this._renderBoxPlot(min, p25, mean, p75, max, boxplotContainer);
+                }, 100);
             };
             if (this.responseTimeData[this.year]) {
                 afterFetch(this.responseTimeData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardResponseTimeUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.responseTimeData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.responseTimeData[this.year]);
@@ -1137,14 +1332,14 @@ class Dashboard {
                 elementTarget.empty().append(chartElement);
                 this._renderAdvancedLineChart([dataMean], chartElement, 0, undefined, {
                     vals: yTicks, labels: yTicks.map(y => formatDuration(y))
-                });
+                }, "ano", "historico_tempo_resposta");
             };
             if (this._verifyHistoryData(this.responseTimeData)) {
                 afterFetch(this.responseTimeData);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardResponseTimeUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.responseTimeData);
                     try {
                         afterFetch(this.responseTimeData);
@@ -1164,13 +1359,14 @@ class Dashboard {
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const values = features
-                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
-                    .filter(f => f.min > 1000 * 60 && f.max < 1000 * 60 * 60 * 24 * 60); //between 1 min and 60 days
+                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
                 if (values.length === 0)
                     throw 'NO_DATA';
                 const min = Math.min.apply(Math, values.map(v => v.min));
                 const max = Math.max.apply(Math, values.map(v => v.max));
+                const p25 = calcMean(values.map(v => v.p25));
                 const mean = calcMean(values.map(v => v.median));
+                const p75 = calcMean(values.map(v => v.p75));
                 const numbers = $(
                     '<div class="number three-values">' +
                     '   <div class="value_ main"><div class="header">' + this.translator.translate("duration.mean") + '</div>' + formatDuration(mean) + '</div>' +
@@ -1178,14 +1374,19 @@ class Dashboard {
                     '   <div class="value_"><div class="header">' + this.translator.translate("duration.max") + '</div>' + formatDuration(max) + '</div>' +
                     '</div>');
                 elementTarget.empty().append(numbers).addClass('number');
-                setTimeout(() => $('.number .value_', elementTarget).addClass('value'), 100);
+                setTimeout(() => {
+                    $('.number .value_', elementTarget).addClass('value');
+                    const boxplotContainer = $('<div class="boxplot-container"></div>');
+                    elementTarget.append(boxplotContainer);
+                    let bp = this._renderBoxPlot(min, p25, mean, p75, max, boxplotContainer);
+                }, 100);
             };
             if (this.fightDurationData[this.year]) {
                 afterFetch(this.fightDurationData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardFirefightingDurationUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.fightDurationData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.fightDurationData[this.year]);
@@ -1209,14 +1410,14 @@ class Dashboard {
                 elementTarget.empty().append(chartElement);
                 this._renderAdvancedLineChart([dataMean], chartElement, 0, undefined, {
                     vals: yTicks, labels: yTicks.map(y => formatDuration(y))
-                });
+                }, "ano", "historico_duracao_combate");
             };
             if (this._verifyHistoryData(this.fightDurationData)) {
                 afterFetch(this.fightDurationData);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardFirefightingDurationUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.fightDurationData);
                     try {
                         afterFetch(this.fightDurationData);
@@ -1236,13 +1437,14 @@ class Dashboard {
         this._initElement(chartTarget, elementTarget => {
             const afterFetch = features => {
                 const values = features
-                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true)
-                    .filter(f => f.min > 1000 * 60 && f.max < 1000 * 60 * 60 * 24 * 60); //between 1 min and 60 days
+                    .filter(f => this.lau1 ? f.lau1_code === this.lau1 : true);
                 if (values.length === 0)
                     throw 'NO_DATA';
                 const min = Math.min.apply(Math, values.map(v => v.min));
                 const max = Math.max.apply(Math, values.map(v => v.max));
+                const p25 = calcMean(values.map(v => v.p25));
                 const mean = calcMean(values.map(v => v.median));
+                const p75 = calcMean(values.map(v => v.p75));
                 const numbers = $(
                     '<div class="number three-values">' +
                     '   <div class="value_ main"><div class="header">' + this.translator.translate("duration.mean") + '</div>' + formatDuration(mean) + '</div>' +
@@ -1250,14 +1452,19 @@ class Dashboard {
                     '   <div class="value_"><div class="header">' + this.translator.translate("duration.max") + '</div>' + formatDuration(max) + '</div>' +
                     '</div>');
                 elementTarget.empty().append(numbers).addClass('number');
-                setTimeout(() => $('.number .value_', elementTarget).addClass('value'), 100);
+                setTimeout(() => {
+                    $('.number .value_', elementTarget).addClass('value');
+                    const boxplotContainer = $('<div class="boxplot-container"></div>');
+                    elementTarget.append(boxplotContainer);
+                    let bp = this._renderBoxPlot(min, p25, mean, p75, max, boxplotContainer);
+                }, 100);
             };
             if (this.totalDurationData[this.year]) {
                 afterFetch(this.totalDurationData[this.year]);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalDurationUrl.format([this.year + ""])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this.totalDurationData[this.year] = data.features.map(f => f.properties);
                     try {
                         afterFetch(this.totalDurationData[this.year]);
@@ -1281,14 +1488,14 @@ class Dashboard {
                 elementTarget.empty().append(chartElement);
                 this._renderAdvancedLineChart([dataMean], chartElement, 0, undefined, {
                     vals: yTicks, labels: yTicks.map(y => formatDuration(y))
-                });
+                }, "ano", "historico_duracao_total");
             };
             if (this._verifyHistoryData(this.totalDurationData)) {
                 afterFetch(this.totalDurationData);
             } else {
                 cache4js.ajaxCache({
                     url: this.config.dashboardTotalDurationUrl.format(["0"])
-                }, 1 * 60 * 60).done(data => {
+                }, 1 * 60 * 15).done(data => {
                     this._fillHistoryFromFeatures(data, this.totalDurationData);
                     try {
                         afterFetch(this.totalDurationData);

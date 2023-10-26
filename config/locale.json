@@ -80,6 +80,7 @@
     "fire.label.precipitation": "Precipitação (mm)",
     "fire.label.mean_height": "Altitude média (m)",
     "fire.label.mean_slope": "Inclinação média (º)",
+    "fire.label.source": "Fonte ICNF",
 
     "fire.ref.cause.UNDETERMINED":"Indeterminada",
     "fire.ref.cause.ACCIDENTAL_OTHERS":"Acidental - outras",
@@ -147,13 +148,21 @@
     "duration.min": "Mínimo",
     "duration.max": "Máximo",
 
+    "area.total": "Total",
+    "area.mean": "Média",
+    "area.max": "Máximo",
+
     "dashboard.series.name.totaAreaHistory": "Área",
     "dashboard.noData": "Sem dados para o período/âmbito geográfico selecionado(s)",
+
+    "dashboard.cause.area": "Área ardida",
+    "dashboard.cause.count": "N.º ignições",
 
     "dashboard.share.title": "Partilhar este dashboard",
     "dashboard.share.context": "Pode partilhar um URL para este dashboard (mantendo a vista atual) através do email, aplicação de mensagens ou do Twitter.",
     "dashboard.share.url": "Partilhar por URL",
     "dashboard.share.twitter": "Partilhar no Twitter",
-    "dashboard.share.twitter.text": "Dashboard de dados históricos de incêndios\n\r"
+    "dashboard.share.twitter.text": "Dashboard de dados históricos de incêndios\n\r",
+    "dashboard.chart.download.csv": "Descarregar dados em CSV"
   }
 }

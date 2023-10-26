@@ -4,10 +4,10 @@ import {Logger} from "../modules/common/log";
 $(function() {
     cache4js.ajaxCache({
         url: '/config/config.json'
-    }, 1*60*60).done(function (mapConfiguration) {
+    }, 1*60*15).done(function (mapConfiguration) {
         cache4js.ajaxCache({
             url: '/config/locale.json'
-        }, 1*60*60).done(function (localizationDictionary) {
+        }, 1*60*15).done(function (localizationDictionary) {
             if (Object.prototype.toString.call(localizationDictionary) === '[object String]') {
                 localizationDictionary = JSON.parse(localizationDictionary);
             }

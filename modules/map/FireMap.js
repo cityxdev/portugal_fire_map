@@ -53,10 +53,10 @@ class FireMap {
 
     chartColors = [
         '#809A6F',
-        '#a25b5b',
+        '#D5D8B5',
         '#96ab88',
         '#b47877',
-        '#acbca1',
+        '#A6A6A6',
         '#c49594',
         '#c3cdbb',
         '#d4b3b2',
@@ -695,6 +695,11 @@ class FireMap {
                                 orographyGroup.append($('<div class="fire-info-element">' + '   <label>' + self.translator.translate('fire.label.' + prop) + '</label>' + '   <div class="fire-info-value">' + properties[prop].toFixed(0) + '</div>' + '</div>'));
                             }
                         });
+
+                        const sourceGroup = $('<div class="one group"></div>');
+                        target.append(sourceGroup);
+                        sourceGroup.append($('<div class="fire-info-element">' + '   <label>' + self.translator.translate('fire.label.source') + '</label>' + '   <div class="fire-info-value"><a target="_blank" href="https://fogos.icnf.pt/sgif2010/IncPrint.asp?Codigo='+properties['original_id']+'">' + properties['original_id'] + '</a></div>' + '</div>'));
+
                     });
                 }
 

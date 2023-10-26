@@ -18,7 +18,7 @@ body.dashboards {
     height: 100%;
     width: 100%;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
-    background-color: rgba(213, 216, 181, 0.75);
+    background-color: #efefef;
     position: relative;
 }
 
@@ -216,7 +216,7 @@ body.dashboards .page-header .fade{
     position: absolute;
     bottom:0;
     left: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #dfe1c7 60%);
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #efefef 60%);
 }
 body.dashboards .page-header.top .fade{
     display: none;
@@ -257,7 +257,7 @@ body.dashboards .page-body .dashboards .context{
 }
 
 body.dashboards .page-body .dashboards .group>.context{
-    font-size: 14px;
+    font-size: 16px;
 }
 body.dashboards .page-body .dashboards .group>.help {
     color: #666666;
@@ -277,6 +277,8 @@ body.dashboards .page-body .dashboards .group .body{
 body.dashboards .page-body .dashboards .group .body .group-element{
     display: inline-grid;
     width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #fff3;
 }
 body.dashboards .page-body .dashboards .group .body .group-element.half{
     width: calc(50% - 6px);
@@ -296,6 +298,10 @@ body.dashboards .page-body .dashboards .group .body .group-element .body{
     height: 300px;
     max-height: 300px;
     text-align: center;
+}
+body.dashboards .page-body .dashboards .group .body .group-element .body.tabbed{
+    height: 310px;
+    max-height: 310px;
 }
 body.dashboards .page-body .dashboards .group .body .group-element .body .number{
     height: 33%;
@@ -339,13 +345,24 @@ body.dashboards .page-body .dashboards .group .body .group-element .body .number
 body.dashboards .page-body .dashboards .group .body .group-element .body .number.half .value {
     font-size: min(1.5vw,30px);
 }
+
+body.dashboards .page-body .dashboards .group .body .group-element .body .boxplot-container{
+    position: relative;
+    height: 50px;
+    margin-top: 20px;
+}
+
 body.dashboards .page-body .dashboards .group .body .group-element .body .chart {
+    position: relative;
     margin-top: 20px;
     width: 100%;
 }
+body.dashboards .page-body .dashboards .group .body .group-element .body.tabbed .chart {
+    margin-top: 0;
+}
 
 body.dashboards .page-body .dashboards .group .body .group-element .body.no-data{
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     color: #555555;
     padding-top: 120px;
@@ -356,6 +373,21 @@ body.dashboards .page-body .dashboards .group .body .group-element .body.no-data
     margin-right: auto;
 }
 
+body.dashboards .page-body .dashboards .group .body .group-element .body .chart button.download-csv-button{
+    position: absolute;
+    right: 0;
+    bottom: -25px;
+    border: 0;
+    color: #a25b5b;
+    background: none;
+    cursor: pointer;
+}
+body.dashboards .page-body .dashboards .group .body .group-element .body .chart button.download-csv-button:hover{
+    background: transparent;
+}
+body.dashboards .page-body .dashboards .group .body .group-element .body .chart.bottom-legend button.download-csv-button {
+    bottom: 5px;
+}
 
 body.dashboards .page-fotter{
     height: 40px;
